@@ -55,12 +55,27 @@
   }).addTo(map);
 
   // Ambil GeoJSON
-  fetch('data/data.geojson')
-    .then(response => response.json())
+<script>
+  var map = L.map('map').setView([-7.2, 110.4], 10);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  fetch('data/data.geojson') // ganti sesuai nama file kamu
+    .then(res => res.json())
     .then(data => {
-      L.geoJSON(data).addTo(map);
+      var layer = L.geoJSON(data, {
+        style: {
+          color: "red",
+          weight: 2
+        }
+      }).addTo(map);
+
+      map.fitBounds(layer.getBounds());
     })
-    .catch(error => {
-      console.log("Error:", error);
+    .catch(err => {
+      console.log("ERROR:", err);
     });
+</script>
 </script>
