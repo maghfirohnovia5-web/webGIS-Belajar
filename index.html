@@ -41,7 +41,7 @@
       });
 
     // LOAD LAYER 2
-    fetch('data/Garis_Pantai_RTRWP_Jawa_Tengah.geojson.geojson')
+    fetch('data/Garis_Pantai_RTRWP_Jawa_Tengah.geojson')
       .then(res => res.json())
       .then(data => {
         var layer = L.geoJSON(data, {
