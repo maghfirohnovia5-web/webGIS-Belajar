@@ -23,59 +23,34 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    // 🔥 HANYA SEKALI buat map
     var map = L.map('map').setView([-7.2, 110.4], 10);
 
+    // Basemap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
+
+    // 🔥 LOAD LAYER 1
+    fetch('data/mangrove_jateng.geojson')
+      .then(res => res.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: { color: "green" }
+        }).addTo(map);
+      });
+
+    // 🔥 LOAD LAYER 2
+    fetch('data/garis_pantai.geojson')
+      .then(res => res.json())
+      .then(data => {
+        var layer = L.geoJSON(data, {
+          style: { color: "red" }
+        }).addTo(map);
+
+        map.fitBounds(layer.getBounds());
+      });
   </script>
 
 </body>
 </html>
-<script>
-  var map = L.map('map').setView([-7.2, 110.4], 10);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
-
-  fetch('data/Mangrove Jawa Tengah.geojson')
-    .then(res => res.json())
-    .then(data => {
-      L.geoJSON(data).addTo(map);
-    });
-</script>
-<script>
-  // Inisialisasi peta
-  var map = L.map('map').setView([-7.2, 110.4], 10);
-
-  // Basemap
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
-
-  // Ambil GeoJSON
-<script>
-  var map = L.map('map').setView([-7.2, 110.4], 10);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
-
-  fetch('data/Garis Pantai RTRWP Jawa Tengah.geojson')
-    .then(res => res.json())
-    .then(data => {
-      var layer = L.geoJSON(data, {
-        style: {
-          color: "red",
-          weight: 2
-        }
-      }).addTo(map);
-
-      map.fitBounds(layer.getBounds());
-    })
-    .catch(err => {
-      console.log("ERROR:", err);
-    });
-</script>
-</script>
