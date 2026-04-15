@@ -23,7 +23,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // 🔥 HANYA SEKALI buat map
+    // HANYA SEKALI buat map
     var map = L.map('map').setView([-7.2, 110.4], 10);
 
     // Basemap
@@ -31,8 +31,8 @@
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-    // 🔥 LOAD LAYER 1
-    fetch('data/mangrove_jateng.geojson')
+    // LOAD LAYER 1
+    fetch('data/Mangrove_Jawa_Tengah.geojson')
       .then(res => res.json())
       .then(data => {
         L.geoJSON(data, {
@@ -40,8 +40,8 @@
         }).addTo(map);
       });
 
-    // 🔥 LOAD LAYER 2
-    fetch('data/garis_pantai.geojson')
+    // LOAD LAYER 2
+    fetch('data/Garis_Pantai_RTRWP_Jawa_Tengah.geojson.geojson')
       .then(res => res.json())
       .then(data => {
         var layer = L.geoJSON(data, {
