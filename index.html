@@ -39,7 +39,7 @@
     attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
-  fetch('data/data.geojson')
+  fetch('data/Mangrove Jawa Tengah.geojson')
     .then(res => res.json())
     .then(data => {
       L.geoJSON(data).addTo(map);
