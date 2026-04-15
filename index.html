@@ -45,3 +45,22 @@
       L.geoJSON(data).addTo(map);
     });
 </script>
+<script>
+  // Inisialisasi peta
+  var map = L.map('map').setView([-7.2, 110.4], 10);
+
+  // Basemap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  // Ambil GeoJSON
+  fetch('data/data.geojson')
+    .then(response => response.json())
+    .then(data => {
+      L.geoJSON(data).addTo(map);
+    })
+    .catch(error => {
+      console.log("Error:", error);
+    });
+</script>
