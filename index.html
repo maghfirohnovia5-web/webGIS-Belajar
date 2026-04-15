@@ -62,7 +62,7 @@
     attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
-  fetch('data/data.geojson') // ganti sesuai nama file kamu
+  fetch('data/Garis Pantai RTRWP Jawa Tengah.geojson') // ganti sesuai nama file kamu
     .then(res => res.json())
     .then(data => {
       var layer = L.geoJSON(data, {
