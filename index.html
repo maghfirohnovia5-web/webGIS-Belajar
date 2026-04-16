@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -38,6 +39,8 @@
         L.geoJSON(data, {
           style: { color: "green" }
         }).addTo(map);
+        
+         map.fitBounds(layer.getBounds());
       });
 
     // LOAD LAYER 2
