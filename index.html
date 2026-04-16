@@ -24,25 +24,40 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // HANYA SEKALI buat map
+    // Inisialisasi peta
     var map = L.map('map').setView([-7.2, 110.4], 10);
 
-    // Basemap
+    // Basemap OSM
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-    // LOAD LAYER 1
-    fetch('data/garpan_jateng.geojson')
-      .then(res => res.json())
-      .then(data => {
-        L.geoJSON(data, {
-          style: { color: "green" }
+    // Load GeoJSON
+    fetch('./data/garpan_jateng.geojson')
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error("File GeoJSON tidak ditemukan!");
+        }
+        return response.json();
+      })
+      .then(function(data) {
+
+        // simpan ke variabel (INI YANG PENTING)
+        var geojsonLayer = L.geoJSON(data, {
+          style: {
+            color: "green",
+            weight: 2
+          }
         }).addTo(map);
-        
-         map.fitBounds(layer.getBounds());
+
+        // zoom ke layer
+        map.fitBounds(geojsonLayer.getBounds());
+      })
+      .catch(function(error) {
+        console.error("Terjadi error:", error);
+        alert("GeoJSON gagal dimuat. Cek console (F12)");
       });
-   
+
   </script>
 
 </body>
