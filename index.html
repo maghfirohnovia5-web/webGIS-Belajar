@@ -33,7 +33,7 @@
     }).addTo(map);
 
     // LOAD LAYER 1
-    fetch('data/Mangrove_Jawa_Tengah.geojson')
+    fetch('data/garpan_jateng.geojson')
       .then(res => res.json())
       .then(data => {
         L.geoJSON(data, {
@@ -42,17 +42,7 @@
         
          map.fitBounds(layer.getBounds());
       });
-
-    // LOAD LAYER 2
-    fetch('data/Garis_Pantai_RTRWP_Jawa_Tengah.geojson')
-      .then(res => res.json())
-      .then(data => {
-        var layer = L.geoJSON(data, {
-          style: { color: "red" }
-        }).addTo(map);
-
-        map.fitBounds(layer.getBounds());
-      });
+   
   </script>
 
 </body>
