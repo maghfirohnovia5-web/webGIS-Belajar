@@ -6,10 +6,10 @@
   <title>WebGIS Belajar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
+    /* Kita bikin kotak buat naruh petanya, tingginya 500 pixel */
     #map {
       height: 500px;
     }
@@ -20,46 +20,70 @@
   <h2>WebGIS Saya</h2>
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // Inisialisasi peta
-    if (typeof map !== 'undefined' && map !== null) {
-        map.remove();
+    // --- BAGIAN BERSIH-BERSIH ---
+    // Kadang browser bingung kalau peta udah ada tapi dibuat lagi, jadi kita reset dulu
+    var container = L.DomUtil.get('map');
+    if(container != null){
+        container._leaflet_id = null;
     }
+
+    // --- SETUP AWAL ---
+    // Kita panggil Leaflet buat bikin peta di div id="map"
+    // [-7.2, 110.4] itu koordinat (Lat/Long) Jawa Tengah, '10' itu level zoom-nya
     var map = L.map('map').setView([-7.2, 110.4], 10);
 
-    // Basemap OSM
+    // --- PASANG BACKGROUND ---
+    // Kita ambil gambar peta dari OpenStreetMap (OSM) buat jadi dasarnya
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
+      attribution: '&copy; OpenStreetMap' // Etika nih, kasih kredit ke penyedia data
     }).addTo(map);
 
-    // Load GeoJSON
-    fetch('./data/garpan_jateng.geojson')
-      .then(function(response) {
-        if (!response.ok) {
-          throw new Error("File GeoJSON tidak ditemukan!");
+    // --- PROSES AMBIL DATA ---
+    // Kita tentuin dulu nih di mana alamat file GeoJSON kamu di GitHub
+    var urlGarpan = './data/garpan_jateng.geojson';
+    var urlMangrove = './data/Mangrove Jawa Tengah.geojson'; 
+
+    // Promise.all itu kayak "Eh browser, tolong ambilin dua file ini barengan ya!"
+    Promise.all([
+      fetch(urlGarpan).then(res => res.json()), // Ambil file Garpan, ubah jadi format JSON
+      fetch(urlMangrove).then(res => res.json()) // Ambil file Mangrove, ubah jadi format JSON
+    ])
+    .then(function(dataArray) {
+      // Kalau berhasil diambil, datanya masuk ke 'dataArray'
+      // dataArray[0] isinya Garpan, dataArray[1] isinya Mangrove
+
+      // Kita bikin layer buat Garpan, kasih warna Hijau
+      var layerGarpan = L.geoJSON(dataArray[0], {
+        style: {
+          color: "green", // Garis pinggir hijau
+          weight: 2,      // Tebal garis
+          fillOpacity: 0.5 // Transparansi warnanya biar nggak nutupin peta bawah
         }
-        return response.json();
-      })
-      .then(function(data) {
-
-        // simpan ke variabel (INI YANG PENTING)
-        var geojsonLayer = L.geoJSON(data, {
-          style: {
-            color: "green",
-            weight: 2
-          }
-        }).addTo(map);
-
-        // zoom ke layer
-        map.fitBounds(geojsonLayer.getBounds());
-      })
-      .catch(function(error) {
-        console.error("Terjadi error:", error);
-        alert("GeoJSON gagal dimuat. Cek console (F12)");
       });
+
+      // Kita bikin layer buat Mangrove, kasih warna Biru biar beda
+      var layerMangrove = L.geoJSON(dataArray[1], {
+        style: {
+          color: "blue",  // Garis pinggir biru
+          weight: 2,
+          fillOpacity: 0.5
+        }
+      });
+
+      // Gabungin dua data tadi jadi satu grup, terus tempelin ke peta (addTo)
+      var allLayers = L.featureGroup([layerGarpan, layerMangrove]).addTo(map);
+
+      // Ini fitur 'magic': Peta otomatis geser/zoom biar semua data kelihatan di layar
+      map.fitBounds(allLayers.getBounds());
+    })
+    .catch(function(error) {
+      // Kalau ada yang salah (misal nama file typo), bakal muncul peringatan di sini
+      console.error("Waduh, ada yang salah pas ambil data:", error);
+      alert("Cek lagi ya, filenya nggak ketemu atau formatnya salah!");
+    });
 
   </script>
 
